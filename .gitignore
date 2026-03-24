@@ -1,0 +1,9 @@
+# Compiled binary (build from source with: xcrun clang -O2 -framework Foundation -o MacOS/ToggleScrolling Resources/main.m)
+MacOS/ToggleScrolling
+
+# Old files
+Resources/toggle_scrolling.sh.old
+Resources/main.swift
+
+# macOS metadata
+.DS_Store
