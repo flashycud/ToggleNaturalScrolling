@@ -1,34 +1,48 @@
-# ToggleNaturalScrolling
+# Toggle Natural Scrolling
 
-A lightweight macOS app that toggles between Natural and Traditional scrolling with one click. It runs and quits without a Dock icon and shows a notification after a successful change. If a preference cannot be saved or applied, it displays an error dialog.
+<p align="center">
+  <img src="Resources/AppIcon.png" alt="Toggle Natural Scrolling app icon" width="128">
+</p>
+
+[![App version](https://img.shields.io/badge/app%20version-2.0-2ea44f)](Info.plist)
+![Language: Objective-C](https://img.shields.io/badge/language-Objective--C-blue)
+![macOS Tahoe 26.x tested](https://img.shields.io/badge/macOS-Tahoe%2026.x%20tested-000000?logo=apple&logoColor=white)
+
+Ever switch between an external mouse at your desk and your MacBook's trackpad, then have to dig through System Settings to change scroll direction? I made this small app to make that switch a one-click action from the app icon.
+
+## What it does
+
+- Toggles the global scroll direction between Natural and Traditional.
+- Applies the change immediately and shows a notification when successful.
+- Reports errors and attempts to restore the previous preferences if saving or applying the change fails.
+- Opens no window and exits after toggling; it does not leave a running Dock icon.
 
 ## Requirements
 
-- macOS (originally tested on macOS Tahoe 26.x)
-- Xcode Command Line Tools (`xcode-select --install`)
-- Original 1024 × 1024 PNG icon artwork. Use a square image, preferably with transparency and without a baked-in rounded mask; leave space around the important artwork for small sizes.
+- macOS (tested on macOS Tahoe 26.x; other versions have not been verified)
+- Xcode Command Line Tools to build (`xcode-select --install`)
 
 ## Build
 
-Place the artwork at `Resources/AppIcon.png`, or pass its path as the first argument:
+From the repository root, run:
 
 ```bash
-bash build.sh /path/to/icon.png
+bash build.sh
 ```
 
-The script generates a macOS `.icns`, builds `build/ToggleNaturalScrolling.app`, and ad-hoc signs it for local use. It refuses to overwrite an existing output; pass a new output path as the second argument when rebuilding:
+This builds `build/ToggleNaturalScrolling.app` with the included icon and ad-hoc signs it for local use. The script will not overwrite an existing output; to build to a different location, pass an output path:
 
 ```bash
-bash build.sh /path/to/icon.png /path/to/new/ToggleNaturalScrolling.app
+bash build.sh Resources/AppIcon.png /tmp/ToggleNaturalScrolling.app
 ```
 
 Ad-hoc signing does not notarize the app for distribution.
 
 ## Install and use
 
-Copy the built app to `/Applications/`, then double-click it to toggle the scroll direction. Do not replace an existing installation without checking it first.
+Copy `build/ToggleNaturalScrolling.app` to `/Applications/` or another location. Launch the app to toggle the scroll direction. For quick access, you can keep a launcher for it in the Dock; the utility itself runs and exits without a persistent Dock icon.
 
-The app writes the global scroll direction preference for both AnyHost and CurrentHost and invokes macOS's private `activateSettings` utility to apply it. If that utility is unavailable or fails on a future macOS version, the app reports the failure and attempts to restore the previous saved preferences. Check System Settings if the error says the active setting may be inconsistent. macOS notification permissions may affect whether a success notification appears.
+The app writes the global scroll direction preference for both AnyHost and CurrentHost, then invokes macOS's private `activateSettings` utility to apply it. If that utility is unavailable or fails, the app reports the error and attempts to restore the saved preferences. Check System Settings if an error says the active setting may be inconsistent. macOS notification permissions can affect whether a success notification appears.
 
 ## Test
 
@@ -36,3 +50,19 @@ The app writes the global scroll direction preference for both AnyHost and Curre
 xcrun clang -framework Foundation Tests/toggle_tests.m -o /tmp/toggle-scrolling-tests
 /tmp/toggle-scrolling-tests
 ```
+
+## Versioning
+
+The app version is defined in `Info.plist` by `CFBundleShortVersionString` and `CFBundleVersion`; both are currently `2.0`. Keep these values, the version badge above, and the changelog aligned when preparing a release. The badge reports the app bundle version, not the latest published GitHub release.
+
+## Changelog
+
+### Unreleased
+
+- Future changes will be listed here.
+
+### 2.0 (current app bundle version)
+
+- Replaced UI automation with a native Objective-C app.
+- Added preference verification, rollback on failure, and clear error reporting.
+- Added the app icon, local build script, and toggle tests.
